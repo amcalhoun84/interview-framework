@@ -1,0 +1,7 @@
+.env
+web/code/cache/*
+web/env/*
+web-nginx/code
+!web/code/cache/.gitkeep
+!web/code/cache/routes/.gitkeep
+!web/code/cache/views/.gitkeep
