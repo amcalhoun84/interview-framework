@@ -3,7 +3,6 @@ FROM php:7.4.1-fpm
 COPY *.conf /usr/local/etc/php-fpm.d/
 
 ADD ./config /
-ADD code /code
 
 # Note: this does not include support for ssl, if you need it, refer
 #       to the miniweb docker file for an example of setting it up
@@ -48,5 +47,9 @@ RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && \
 RUN docker-php-ext-install openssl; exit 0
 RUN cp /usr/src/php/ext/openssl/config0.m4 /usr/src/php/ext/openssl/config.m4 && \
     docker-php-ext-install openssl
+
+ADD code /code
+
+ENTRYPOINT [ "bash", "/scripts/entrypoint.sh" ]
 
 CMD [ "php-fpm" ]

@@ -72,11 +72,7 @@ test-docker-compose-run() {
 }
 
 clear-container-cache() {
-    ls web/code/cache/container* 2> /dev/null | while read file; do
-        if [ -f "${file}" ]; then
-            rm $file
-        fi
-    done
+    init-docker-compose-run web bash /scripts/clear-container-cache.sh
 }
 
 for ARG in "$@"; do
