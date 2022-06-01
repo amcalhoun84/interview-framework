@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Example\Tests\Unit\Controller;
 
+use Example\Model\ExampleModel;
 use Example\Tests\BaseCase;
 use Mini\Controller\Exception\BadInputException;
 
@@ -12,37 +13,43 @@ use Mini\Controller\Exception\BadInputException;
  */
 class ExampleViewTest extends BaseCase
 {
+    private ExampleModel $model;
+
+    public function setUp(): void {
+        $this->model = new ExampleModel();
+    }
     /**
      * Test getting an example view to display its data.
-     * 
+     *
      * @return void
      */
     public function testGet(): void
     {
         $this->mockDatabaseGetProcess();
 
-        $view = $this->getClass('Example\View\ExampleView')->get(1);
+        $this->model->setId(1);
+        $view = $this->getClass('Example\View\ExampleView')->get($this->model);
 
         $this->assertNotEmpty($view);
         $this->assertIsString($view);
 
         // Look for the newly created example
-        $this->assertStringContainsString('TESTCODE', $view);
-        $this->assertStringContainsString('Test description', $view);
+        $this->assertStringContainsString('SEEDEX', $view);
+        $this->assertStringContainsString('Seed example', $view);
     }
 
     /**
      * Test getting an example view errors on unknown example ID.
-     * 
+     *
      * @return void
      */
     public function testGetErrorsOnUnknownExampleId(): void
     {
         $this->expectException(BadInputException::class);
-        
+
         $this->mockDatabaseGetUnkownIdProcess();
 
-        $this->getClass('Example\View\ExampleView')->get(2);
+        $this->getClass('Example\View\ExampleView')->get($this->model);
     }
 
     /**
@@ -56,7 +63,6 @@ class ExampleViewTest extends BaseCase
 
         // Setup the database mock
         $database->shouldReceive('select')
-            ->once()
             ->withArgs($this->withDatabaseInput([1]))
             ->andReturn([
                 'id'          => 1,
@@ -79,7 +85,6 @@ class ExampleViewTest extends BaseCase
 
         // Setup the database mock
         $database->shouldReceive('select')
-            ->once()
             ->withArgs($this->withDatabaseInput([2]))
             ->andReturn([]);
 

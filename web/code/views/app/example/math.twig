@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col">
+        <form id="math-form">
+            <h1> Math Form (Additional Assignment) </h1>
+            <div class="form-group">
+                <label for="first-num">First Number</label>
+                <input type="text" id="first-num" class="form-control" name="firstNum" placeholder="2">
+            </div>
+
+            <div class="form-group">
+                <label for="second-num">Description</label>
+                <input type="text" id="second-num" class="form-control" name="secondNum" placeholder="3">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Numbers</button>
+        </form>
+
+        <div id="math-view"></div>
+
+        <script>
+            document.querySelector('#math-form').onsubmit = function(e) {
+                e.preventDefault();
+
+                const data = new FormData(e.target);
+
+                // Ensure every input has a value
+                for (var [key, value] of data.entries()) {
+                    if (!value) {
+                        document.querySelector('#math-form input[name="' + key + '"]').focus();
+                        return;
+                    }
+                }
+
+                sendPost('example/quickCalculator', data, view => document.querySelector('#math-view').innerHTML = view);
+            };
+        </script>
+    </div>
+</div>
